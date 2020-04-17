@@ -121,3 +121,6 @@
 
 // VIA lighting is handled by the keyboard-level code
 #define VIA_CUSTOM_LIGHTING_ENABLE
+
+// Always send Escape if Control is pressed
+#define GRAVE_ESC_CTRL_OVERRIDE
