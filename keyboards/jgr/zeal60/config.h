@@ -124,3 +124,9 @@
 
 // Always send Escape if Control is pressed
 #define GRAVE_ESC_CTRL_OVERRIDE
+
+// The number of brightness levels (maximum 31 excluding off)
+#define BACKLIGHT_LEVELS 10
+
+// Enable Caps Lock indicator using backlight (for keyboards without dedicated LED)
+#define BACKLIGHT_CAPS_LOCK
