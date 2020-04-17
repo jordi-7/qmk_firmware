@@ -1,20 +1,6 @@
 // Default layout for Zeal60
 #include QMK_KEYBOARD_H
 
-enum unicode_names {
-    C_CAPS,
-	C_MIN,
-	N_CAPS,
-    N_MIN
-};
-
-const uint32_t PROGMEM unicode_map[] = {
-	[C_CAPS] = 0xC7, 	// Ç
-    [C_MIN] = 0xE7, 	// ç
-	[N_CAPS] = 0xD1, 	// Ñ
-    [N_MIN] = 0xF1, 	// ñ
-};
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [0] = LAYOUT_60_ansi(
