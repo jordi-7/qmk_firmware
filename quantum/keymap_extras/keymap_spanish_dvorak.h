@@ -1,4 +1,4 @@
-/* Copyright 2016 heartsekai
+/* Copyright 2020 José Andrés García
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,170 +13,139 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+ 
 #pragma once
 
 #include "keymap.h"
 
-// clang-format off
-
-#ifdef CH_H
-// The ChibiOS ch.h file defines this...
-#    undef CH_H
-#endif
-
 /*
  * ┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───────┐
- * │ § │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │ 9 │ 0 │ ' │ ^ │       │
+ * │ º │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │ 9 │ 0 │ ' │ ¡ │       │
  * ├───┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─────┤
- * │     │ Q │ W │ E │ R │ T │ Z │ U │ I │ O │ P │ ü │ ¨ │     │
+ * │     │ . │ , │ Ñ │ P │ Y │ F │ G │ C │ H │ L │ ` │ + │     │
  * ├─────┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┐    │
- * │      │ A │ S │ D │ F │ G │ H │ J │ K │ L │ ö │ ä │ $ │    │
+ * │      │ A │ O │ E │ U │ I │ D │ R │ T │ N │ S │ ' │ Ç │    │
  * ├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴───┴────┤
- * │    │ < │ Y │ X │ C │ V │ B │ N │ M │ , │ . │ - │          │
+ * │    │ < │ - │ Q │ J │ K │ X │ B │ M │ W │ V │ Z │          │
  * ├────┼───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬────┬────┤
  * │    │    │    │                        │    │    │    │    │
  * └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘
  */
 // Row 1
-#define CH_SECT KC_GRV  // §
-#define CH_1    KC_1    // 1
-#define CH_2    KC_2    // 2
-#define CH_3    KC_3    // 3
-#define CH_4    KC_4    // 4
-#define CH_5    KC_5    // 5
-#define CH_6    KC_6    // 6
-#define CH_7    KC_7    // 7
-#define CH_8    KC_8    // 8
-#define CH_9    KC_9    // 9
-#define CH_0    KC_0    // 0
-#define CH_QUOT KC_MINS // '
-#define CH_CIRC KC_EQL  // ^ (dead)
+#define DV_MORD KC_GRV  // º
+#define DV_1    KC_1    // 1
+#define DV_2    KC_2    // 2
+#define DV_3    KC_3    // 3
+#define DV_4    KC_4    // 4
+#define DV_5    KC_5    // 5
+#define DV_6    KC_6    // 6
+#define DV_7    KC_7    // 7
+#define DV_8    KC_8    // 8
+#define DV_9    KC_9    // 9
+#define DV_0    KC_0    // 0
+#define DV_QUOT KC_MINS // '
+#define DV_IEXL KC_EQL  // ¡
 // Row 2
-#define CH_Q    KC_Q    // Q
-#define CH_W    KC_W    // W
-#define CH_E    KC_E    // E
-#define CH_R    KC_R    // R
-#define CH_T    KC_T    // T
-#define CH_Z    KC_Y    // Z
-#define CH_U    KC_U    // U
-#define CH_I    KC_I    // I
-#define CH_O    KC_O    // O
-#define CH_P    KC_P    // P
-#define CH_UDIA KC_LBRC // ü
-#define CH_DIAE KC_RBRC // ¨ (dead)
+#define DV_DOT  KC_Q    // .
+#define DV_COMM KC_W    // ,
+#define DV_NTIL KC_E    // Ñ
+#define DV_P    KC_R    // P
+#define DV_Y    KC_T    // Y
+#define DV_F    KC_Y    // F
+#define DV_G    KC_U    // G
+#define DV_C    KC_I    // C
+#define DV_H    KC_O    // H
+#define DV_L    KC_P    // L
+#define DV_GRV  KC_LBRC // ` (dead)
+#define DV_PLUS KC_RBRC // +
 // Row 3
-#define CH_A    KC_A    // A
-#define CH_S    KC_S    // S
-#define CH_D    KC_D    // D
-#define CH_F    KC_F    // F
-#define CH_G    KC_G    // G
-#define CH_H    KC_H    // H
-#define CH_J    KC_J    // J
-#define CH_K    KC_K    // K
-#define CH_L    KC_L    // L
-#define CH_ODIA KC_SCLN // ö
-#define CH_ADIA KC_QUOT // ä
-#define CH_DLR  KC_NUHS // $
+#define DV_A    KC_A    // A
+#define DV_O    KC_S    // O
+#define DV_E    KC_D    // E
+#define DV_U    KC_F    // U
+#define DV_I    KC_G    // I
+#define DV_D    KC_H    // D
+#define DV_R    KC_J    // R
+#define DV_T    KC_K    // T
+#define DV_N    KC_L    // N
+#define DV_S    KC_SCLN // S
+#define DV_ACUT KC_QUOT // ´ (dead)
+#define DV_CCED KC_NUHS // Ç
 // Row 4
-#define CH_LABK KC_NUBS // <
-#define CH_Y    KC_Z    // Y
-#define CH_X    KC_X    // X
-#define CH_C    KC_C    // C
-#define CH_V    KC_V    // V
-#define CH_B    KC_B    // B
-#define CH_N    KC_N    // N
-#define CH_M    KC_M    // M
-#define CH_COMM KC_COMM // ,
-#define CH_DOT  KC_DOT  // .
-#define CH_MINS KC_SLSH // -
+#define DV_LABK KC_NUBS // <
+#define DV_MINS KC_Z    // -
+#define DV_Q    KC_X    // Q
+#define DV_J    KC_C    // J
+#define DV_K    KC_V    // K
+#define DV_X    KC_B    // X
+#define DV_B    KC_N    // B
+#define DV_M    KC_M    // M
+#define DV_W    KC_COMM // W
+#define DV_V    KC_DOT  // V
+#define DV_Z    KC_SLSH // Z
 
 /* Shifted symbols
  * ┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───────┐
- * │ ° │ + │ " │ * │ ç │ % │ & │ / │ ( │ ) │ = │ ? │ ` │       │
+ * │ ª │ ! │ " │ · │ $ │ % │ & │ / │ ( │ ) │ = │ ? │ ¿ │       │
  * ├───┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─────┤
- * │     │   │   │   │   │   │   │   │   │   │   │ è │ ! │     │
+ * │     │ : │ ; │   │   │   │   │   │   │   │   │ ^ │ * │     │
  * ├─────┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┐    │
- * │      │   │   │   │   │   │   │   │   │   │ é │ à │ £ │    │
+ * │      │   │   │   │   │   │   │   │   │   │   │ ¨ │   │    │
  * ├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴───┴────┤
- * │    │ > │   │   │   │   │   │   │   │ ; │ : │ _ │          │
+ * │    │ > │ _ │   │   │   │   │   │   │   │   │   │          │
  * ├────┼───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬────┬────┤
  * │    │    │    │                        │    │    │    │    │
  * └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘
  */
 // Row 1
-#define CH_DEG  S(CH_SECT) // °
-#define CH_PLUS S(CH_1)    // +
-#define CH_DQUO S(CH_2)    // "
-#define CH_ASTR S(CH_3)    // *
-#define CH_CCED S(CH_4)    // ç
-#define CH_PERC S(CH_5)    // %
-#define CH_AMPR S(CH_6)    // &
-#define CH_SLSH S(CH_7)    // /
-#define CH_LPRN S(CH_8)    // (
-#define CH_RPRN S(CH_9)    // )
-#define CH_EQL  S(CH_0)    // =
-#define CH_QUES S(CH_QUOT) // ?
-#define CH_GRV  S(CH_CIRC) // ` (dead)
+#define DV_FORD S(DV_MORD) // ª
+#define DV_EXLM S(DV_1)    // !
+#define DV_DQUO S(DV_2)    // "
+#define DV_BULT S(DV_3)    // ·
+#define DV_DLR  S(DV_4)    // $
+#define DV_PERC S(DV_5)    // %
+#define DV_AMPR S(DV_6)    // &
+#define DV_SLSH S(DV_7)    // /
+#define DV_LPRN S(DV_8)    // (
+#define DV_RPRN S(DV_9)    // )
+#define DV_EQL  S(DV_0)    // =
+#define DV_QUES S(DV_QUOT) // ?
+#define DV_IQUE S(DV_IEXL) // ¿
 // Row 2
-#define CH_EGRV S(CH_UDIA) // è
-#define CH_EXLM S(CH_DIAE) // !
+#define DV_COLN S(KC_DOT)  // :
+#define DV_SCLN S(KC_COMM) // ;
+#define DV_CIRC S(DV_GRV)  // ^ (dead)
+#define DV_ASTR S(DV_PLUS) // *
 // Row 3
-#define CH_EACU S(CH_ODIA) // é
-#define CH_AGRV S(CH_ADIA) // à
-#define CH_PND  S(CH_DLR)  // £
+#define DV_DIAE S(DV_GRV)  // ¨ (dead)
 // Row 4
-#define CH_RABK S(CH_LABK) // >
-#define CH_SCLN S(CH_COMM) // ;
-#define CH_COLN S(CH_DOT)  // :
-#define CH_UNDS S(CH_MINS) // _
+#define DV_RABK S(DV_LABK) // >
+#define DV_UNDS S(DV_MINS) // _
 
 /* AltGr symbols
  * ┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───────┐
- * │   │ ¦ │ @ │ # │   │   │ ¬ │ | │ ¢ │   │   │ ´ │ ~ │       │
+ * │ \ │ | │ @ │ # │ ~ │ € │ ¬ │   │   │   │   │   │   │       │
  * ├───┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─────┤
- * │     │   │   │ € │   │   │   │   │   │   │   │ [ │ ] │     │
+ * │     │   │   │   │   │   │   │   │   │   │   │ [ │ ] │     │
  * ├─────┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┐    │
  * │      │   │   │   │   │   │   │   │   │   │   │ { │ } │    │
  * ├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴───┴────┤
- * │    │ \ │   │   │   │   │   │   │   │   │   │   │          │
+ * │    │   │   │   │   │   │   │   │   │   │   │   │          │
  * ├────┼───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬────┬────┤
  * │    │    │    │                        │    │    │    │    │
  * └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘
  */
 // Row 1
-#define CH_BRKP ALGR(CH_1)    // ¦
-#define CH_AT   ALGR(CH_2)    // @
-#define CH_HASH ALGR(CH_3)    // #
-#define CH_NOT  ALGR(CH_6)    // ¬
-#define CH_PIPE ALGR(CH_7)    // |
-#define CH_CENT ALGR(CH_8)    // ¢
-#define CH_ACUT ALGR(CH_QUOT) // ´ (dead)
-#define CH_TILD ALGR(CH_CIRC) // ~ (dead)
+#define DV_BSLS ALGR(DV_MORD) // (backslash)
+#define DV_PIPE ALGR(DV_1)    // |
+#define DV_AT   ALGR(DV_2)    // @
+#define DV_HASH ALGR(DV_3)    // #
+#define DV_TILD ALGR(DV_4)    // ~
+#define DV_EURO ALGR(DV_5)    // €
+#define DV_NOT  ALGR(DV_6)    // ¬
 // Row 2
-#define CH_EURO ALGR(CH_E)    // €
-#define CH_LBRC ALGR(CH_UDIA) // [
-#define CH_RBRC ALGR(CH_DIAE) // ]
+#define DV_LBRC ALGR(DV_GRV)  // [
+#define DV_RBRC ALGR(DV_PLUS) // ]
 // Row 3
-#define CH_LCBR ALGR(CH_ADIA) // {
-#define CH_RCBR ALGR(CH_DLR)  // }
-// Row 4
-#define CH_BSLS ALGR(CH_LABK) // (backslash)
-
-// DEPRECATED
-#define CH_AE   CH_ADIA
-#define CH_UE   CH_UDIA
-#define CH_OE   CH_ODIA
-#define CH_PARA CH_SECT
-#define CH_CARR CH_CIRC
-#define CH_DIER CH_DIAE
-#define CH_LESS CH_LABK
-#define CH_RING CH_DEG
-#define CH_DQOT CH_DQUO
-#define CH_PAST CH_ASTR
-#define CH_CELA CH_CCED
-#define CH_QST  CH_QUES
-#define CH_POND CH_PND
-#define CH_MORE CH_RABK
-#define CH_BRBR CH_BRKP
-#define CH_NOTL CH_NOT
+#define DV_LCBR ALGR(DV_ACUT) // {
+#define DV_RCBR ALGR(DV_CCED) // }

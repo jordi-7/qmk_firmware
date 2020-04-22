@@ -1,4 +1,4 @@
-/* Copyright 2016 Jack Humbert
+/* Copyright 2020 José Andrés García
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Sendstring lookup tables for French (AZERTY) layouts
+// Sendstring lookup tables for Spanish Dvorak layout
 
 #pragma once
 
-#include "keymap_french.h"
+#include "keymap_spanish_dvorak.h"
 #include "quantum.h"
 
 // clang-format off
@@ -29,14 +29,14 @@ const uint8_t ascii_to_shift_lut[16] PROGMEM = {
     KCLUT_ENTRY(0, 0, 0, 0, 0, 0, 0, 0),
     KCLUT_ENTRY(0, 0, 0, 0, 0, 0, 0, 0),
 
-    KCLUT_ENTRY(0, 0, 0, 0, 0, 1, 0, 0),
-    KCLUT_ENTRY(0, 0, 0, 1, 0, 0, 1, 1),
-    KCLUT_ENTRY(1, 1, 1, 1, 1, 1, 1, 1),
-    KCLUT_ENTRY(1, 1, 0, 0, 0, 0, 1, 1),
+    KCLUT_ENTRY(0, 1, 1, 0, 1, 1, 1, 0),
+    KCLUT_ENTRY(1, 1, 1, 0, 0, 0, 0, 1),
+    KCLUT_ENTRY(0, 0, 0, 0, 0, 0, 0, 0),
+    KCLUT_ENTRY(0, 0, 1, 1, 0, 1, 1, 1),
     KCLUT_ENTRY(0, 1, 1, 1, 1, 1, 1, 1),
     KCLUT_ENTRY(1, 1, 1, 1, 1, 1, 1, 1),
     KCLUT_ENTRY(1, 1, 1, 1, 1, 1, 1, 1),
-    KCLUT_ENTRY(1, 1, 1, 0, 0, 0, 0, 0),
+    KCLUT_ENTRY(1, 1, 1, 0, 0, 0, 1, 1),
     KCLUT_ENTRY(0, 0, 0, 0, 0, 0, 0, 0),
     KCLUT_ENTRY(0, 0, 0, 0, 0, 0, 0, 0),
     KCLUT_ENTRY(0, 0, 0, 0, 0, 0, 0, 0),
@@ -56,8 +56,8 @@ const uint8_t ascii_to_altgr_lut[16] PROGMEM = {
     KCLUT_ENTRY(1, 0, 0, 0, 0, 0, 0, 0),
     KCLUT_ENTRY(0, 0, 0, 0, 0, 0, 0, 0),
     KCLUT_ENTRY(0, 0, 0, 0, 0, 0, 0, 0),
-    KCLUT_ENTRY(0, 0, 0, 1, 1, 1, 1, 0),
-    KCLUT_ENTRY(1, 0, 0, 0, 0, 0, 0, 0),
+    KCLUT_ENTRY(0, 0, 0, 1, 1, 1, 0, 0),
+    KCLUT_ENTRY(0, 0, 0, 0, 0, 0, 0, 0),
     KCLUT_ENTRY(0, 0, 0, 0, 0, 0, 0, 0),
     KCLUT_ENTRY(0, 0, 0, 0, 0, 0, 0, 0),
     KCLUT_ENTRY(0, 0, 0, 1, 1, 1, 1, 0)
@@ -74,27 +74,27 @@ const uint8_t ascii_to_keycode_lut[128] PROGMEM = {
     XXXXXXX, XXXXXXX, XXXXXXX, KC_ESC,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
 
     //       !        "        #        $        %        &        '
-    KC_SPC,  FR_EXLM, FR_QUOT, FR_DQUO, FR_DLR,  FR_UGRV, FR_AMPR, FR_QUOT,
+    KC_SPC,  DV_1,    DV_2,    DV_3,    DV_4,    DV_5,    DV_6,    DV_QUOT,
     // (     )        *        +        ,        -        .        /
-    FR_LPRN, FR_RPRN, FR_ASTR, FR_EQL,  FR_COMM, FR_MINS, FR_SCLN, FR_COLN,
+    DV_8,    DV_9,    DV_PLUS, DV_PLUS, DV_COMM, DV_MINS, DV_DOT,  DV_7,
     // 0     1        2        3        4        5        6        7
-    FR_AGRV, FR_AMPR, FR_EACU, FR_DQUO, FR_QUOT, FR_LPRN, FR_MINS, FR_EGRV,
+    DV_0,    DV_1,    DV_2,    DV_3,    DV_4,    DV_5,    DV_6,    DV_7,
     // 8     9        :        ;        <        =        >        ?
-    FR_CCED, FR_AGRV, FR_COLN, FR_SCLN, FR_LABK, FR_EQL,  FR_LABK, FR_COMM,
+    DV_8,    DV_9,    DV_DOT,  DV_COMM, DV_LABK, DV_0,    DV_LABK, DV_QUOT,
     // @     A        B        C        D        E        F        G
-    FR_AGRV, FR_A,    FR_B,    FR_C,    FR_D,    FR_E,    FR_F,    FR_G,
+    DV_2,    DV_A,    DV_B,    DV_C,    DV_D,    DV_E,    DV_F,    DV_G,
     // H     I        J        K        L        M        N        O
-    FR_H,    FR_I,    FR_J,    FR_K,    FR_L,    FR_M,    FR_N,    FR_O,
+    DV_H,    DV_I,    DV_J,    DV_K,    DV_L,    DV_M,    DV_N,    DV_O,
     // P     Q        R        S        T        U        V        W
-    FR_P,    FR_Q,    FR_R,    FR_S,    FR_T,    FR_U,    FR_V,    FR_W,
+    DV_P,    DV_Q,    DV_R,    DV_S,    DV_T,    DV_U,    DV_V,    DV_W,
     // X     Y        Z        [        \        ]        ^        _
-    FR_X,    FR_Y,    FR_Z,    FR_LPRN, FR_UNDS, FR_RPRN, FR_CCED, FR_UNDS,
+    DV_X,    DV_Y,    DV_Z,    DV_GRV,  DV_MORD, DV_PLUS, DV_GRV,  DV_MINS,
     // `     a        b        c        d        e        f        g
-    FR_EGRV, FR_A,    FR_B,    FR_C,    FR_D,    FR_E,    FR_F,    FR_G,
+    DV_GRV,  DV_A,    DV_B,    DV_C,    DV_D,    DV_E,    DV_F,    DV_G,
     // h     i        j        k        l        m        n        o
-    FR_H,    FR_I,    FR_J,    FR_K,    FR_L,    FR_M,    FR_N,    FR_O,
+    DV_H,    DV_I,    DV_J,    DV_K,    DV_L,    DV_M,    DV_N,    DV_O,
     // p     q        r        s        t        u        v        w
-    FR_P,    FR_Q,    FR_R,    FR_S,    FR_T,    FR_U,    FR_V,    FR_W,
+    DV_P,    DV_Q,    DV_R,    DV_S,    DV_T,    DV_U,    DV_V,    DV_W,
     // x     y        z        {        |        }        ~        DEL
-    FR_X,    FR_Y,    FR_Z,    FR_QUOT, FR_MINS, FR_EQL,  FR_EACU, KC_DEL
+    DV_X,    DV_Y,    DV_Z,    DV_ACUT, DV_1,    DV_CCED, DV_4,    KC_DEL
 };
