@@ -40,18 +40,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 void encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) {
+    if (index == 1) {
         if (clockwise) {
-            tap_code(KC_VOLU);
+            tap_code(KC_MS_WH_RIGHT);
         } else {
-            tap_code(KC_VOLD);
-        }
-    }
-    else if (index == 1) {
-        if (clockwise) {
-            tap_code(KC_PGDN);
-        } else {
-            tap_code(KC_PGUP);
+            tap_code(KC_MS_WH_LEFT);
         }
     }
 }
