@@ -51,7 +51,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             break;
 
         case 1:
-            rgblight_setrgb(0, 255, 255);
+            rgblight_setrgb(0, 170, 255);
             break;
 
         case 2:
