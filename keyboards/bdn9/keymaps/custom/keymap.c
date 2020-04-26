@@ -58,27 +58,37 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     }
 }
 
+const rgblight_segment_t PROGMEM my_capslock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {0, 0, HSV_WHITE}
+);
+
+const rgblight_segment_t PROGMEM my_layer1_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {0, 4, HSV_CYAN}
+);
+
+const rgblight_segment_t PROGMEM my_layer2_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {0, 4, HSV_WHITE}
+);
+
+const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
+    my_capslock_layer,
+    my_layer1_layer,
+    my_layer2_layer
+);
+
+void keyboard_post_init_user(void) {
+    rgblight_layers = my_rgb_layers;
+}
+
 layer_state_t layer_state_set_user(layer_state_t state) {
-    switch (get_highest_layer(state)) {
+    rgblight_set_layer_state(1, layer_state_cmp(state, 1));
+    rgblight_set_layer_state(2, layer_state_cmp(state, 2));
 
-        case 0:
-            rgblight_setrgb(255, 0, 190);
-            break;
-
-        case 1:
-            rgblight_setrgb(0, 170, 255);
-            break;
-
-        case 2:
-            rgblight_setrgb(RGB_WHITE);
-            break;
-
-        default:
-            rgblight_setrgb(255, 0, 190);
-            break;
-
-        }
-        
     return state;
+}
 
+bool led_update_user(led_t led_state) {
+    rgblight_set_layer_state(0, led_state.caps_lock);
+    
+    return true;
 }
