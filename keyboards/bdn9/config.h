@@ -68,3 +68,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Enable lighting layers
 #define RGBLIGHT_LAYERS
+
+// Swap encoder A & B pad definitions
+#define ENCODER_DIRECTION_FLIP
