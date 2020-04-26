@@ -2,7 +2,7 @@
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-[0] = LAYOUT(
+    [0] = LAYOUT(
         KC_MUTE, KC_HOME, KC_MPLY,
         MO(1)  , KC_UP  , RGB_MOD,
         KC_LEFT, KC_DOWN, KC_RGHT
@@ -59,6 +59,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             break;
 
         default:
+            rgblight_setrgb(255, 0, 190);
             break;
 
         }

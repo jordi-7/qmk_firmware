@@ -74,6 +74,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             break;
 
         default:
+            rgblight_setrgb(255, 0, 190);
             break;
 
         }
