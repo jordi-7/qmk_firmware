@@ -47,15 +47,15 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
 
         case 0:
-            rgblight_setrgb (0x00,  0x00, 0xFF);
+            rgblight_setrgb(255, 0, 190);
             break;
 
         case 1:
-            rgblight_setrgb (0x00,  0x00, 0xFF);
+            rgblight_setrgb(0, 255, 255);
             break;
 
         case 2:
-            rgblight_setrgb (0x00,  0x00, 0xFF);
+            rgblight_setrgb(RGB_WHITE);
             break;
 
         default:
