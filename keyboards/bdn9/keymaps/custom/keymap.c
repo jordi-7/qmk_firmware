@@ -46,13 +46,13 @@ void encoder_update_user(uint8_t index, bool clockwise) {
         }
 
         if (IS_LAYER_ON(1)) {
-            if (clockwise) SEND_STRING(SS_LCTRL(SS_LSFT(SS_TAP(X_F1))));
-            else SEND_STRING(SS_LCTRL(SS_LSFT(SS_TAP(X_F2))));
+            if (clockwise) SEND_STRING(SS_LCTRL(SS_LSFT(SS_TAP(X_F21))));
+            else SEND_STRING(SS_LCTRL(SS_LSFT(SS_TAP(X_F22))));
         }
 
         if (IS_LAYER_ON(2)) {
-            if (clockwise) SEND_STRING(SS_LCTRL(SS_LSFT(SS_TAP(X_F3))));
-            else SEND_STRING(SS_LCTRL(SS_LSFT(SS_TAP(X_F4))));
+            if (clockwise) SEND_STRING(SS_LCTRL(SS_LSFT(SS_TAP(X_F23))));
+            else SEND_STRING(SS_LCTRL(SS_LSFT(SS_TAP(X_F24))));
         }
 
     }
