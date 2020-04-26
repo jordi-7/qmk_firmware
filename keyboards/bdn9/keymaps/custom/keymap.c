@@ -40,7 +40,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 1) {
 
-        if (IS_LAYER_ON(0)) {
+        if (!IS_LAYER_ON(1) && !IS_LAYER_ON(2)) {
             if (clockwise) tap_code(KC_MS_WH_RIGHT);
             else tap_code(KC_MS_WH_LEFT);
         }
@@ -56,4 +56,28 @@ void encoder_update_user(uint8_t index, bool clockwise) {
         }
 
     }
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    switch (get_highest_layer(state)) {
+
+        case 0:
+            rgblight_setrgb(255, 0, 190);
+            break;
+
+        case 1:
+            rgblight_setrgb(0, 255, 255);
+            break;
+
+        case 2:
+            rgblight_setrgb(RGB_WHITE);
+            break;
+
+        default:
+            break;
+
+        }
+        
+    return state;
+
 }
