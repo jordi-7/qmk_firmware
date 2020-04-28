@@ -34,4 +34,3 @@ HD44780_ENABLE = no	# Enable support for HD44780 based LCDs
 ENCODER_ENABLE = yes
 
 VIA_ENABLE = yes
-
