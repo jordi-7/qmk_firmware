@@ -58,26 +58,26 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     }
 }
 
-const rgblight_segment_t PROGMEM my_capslock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+const rgblight_segment_t PROGMEM layer_main[] = RGBLIGHT_LAYER_SEGMENTS (
     {0, 0, HSV_WHITE}
 );
 
-const rgblight_segment_t PROGMEM my_layer1_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+const rgblight_segment_t PROGMEM layer_1[] = RGBLIGHT_LAYER_SEGMENTS (
     {0, 4, HSV_CYAN}
 );
 
-const rgblight_segment_t PROGMEM my_layer2_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+const rgblight_segment_t PROGMEM layer_2[] = RGBLIGHT_LAYER_SEGMENTS (
     {0, 4, HSV_WHITE}
 );
 
-const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
-    my_capslock_layer,
-    my_layer1_layer,
-    my_layer2_layer
+const rgblight_segment_t* const PROGMEM rgb_layers[] = RGBLIGHT_LAYERS_LIST (
+    layer_main,
+    layer_1,
+    layer_2
 );
 
 void keyboard_post_init_user(void) {
-    rgblight_layers = my_rgb_layers;
+    rgblight_layers = rgb_layers;
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
