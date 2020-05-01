@@ -58,6 +58,11 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     }
 }
 
+void keyboard_post_init_user(void) {
+    wait_ms(100);
+    rgblight_sethsv(213, 255, rgblight_get_val());  
+}
+
 layer_state_t layer_state_set_user(layer_state_t state) {
     
     // Color codes
