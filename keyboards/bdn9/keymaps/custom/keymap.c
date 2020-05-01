@@ -58,37 +58,28 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     }
 }
 
-const rgblight_segment_t PROGMEM layer_main[] = RGBLIGHT_LAYER_SEGMENTS (
-    {0, 0, HSV_WHITE}
-);
-
-const rgblight_segment_t PROGMEM layer_1[] = RGBLIGHT_LAYER_SEGMENTS (
-    {0, 4, HSV_CYAN}
-);
-
-const rgblight_segment_t PROGMEM layer_2[] = RGBLIGHT_LAYER_SEGMENTS (
-    {0, 4, HSV_WHITE}
-);
-
-const rgblight_segment_t* const PROGMEM rgb_layers[] = RGBLIGHT_LAYERS_LIST (
-    layer_main,
-    layer_1,
-    layer_2
-);
-
-void keyboard_post_init_user(void) {
-    rgblight_layers = rgb_layers;
-}
-
 layer_state_t layer_state_set_user(layer_state_t state) {
-    rgblight_set_layer_state(1, layer_state_cmp(state, 1));
-    rgblight_set_layer_state(2, layer_state_cmp(state, 2));
-
-    return state;
-}
-
-bool led_update_user(led_t led_state) {
-    rgblight_set_layer_state(0, led_state.caps_lock);
     
-    return true;
+    // Color codes
+    // https://github.com/qmk/qmk_firmware/blob/master/quantum/rgblight_list.h
+
+    uint8_t layer = biton32(state);
+
+    switch (layer) {
+
+    case 0:
+        rgblight_sethsv(213, 255, rgblight_get_val());
+        break;
+
+      case 1:
+        rgblight_sethsv(128, 255, rgblight_get_val());
+        break;
+
+      case 2:
+        rgblight_sethsv(0, 0, rgblight_get_val());
+        break;
+
+    }
+    
+    return state;
 }
