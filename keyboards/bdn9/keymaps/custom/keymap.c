@@ -108,26 +108,8 @@ void encoder_update_user(uint8_t index, bool clockwise) {
 
     }
 
-    // If LEDs have been turned off, restore previous brightness
-    if (led_on == false || old_backlight_level == -1) {
-
-        if (old_backlight_level == -1) {
-            // Get previous backlight brightness
-            old_backlight_level = get_backlight_level();
-            // Get underglow backlight brightness
-            old_underglow_level = rgblight_get_val();
-        }
-
-        // Restore backlight brightness
-        backlight_set(old_backlight_level);
-        // Restore underglow brightness
-        rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), old_underglow_level);
-
-        led_on = true;
-    }
-
-    idle_timer = timer_read();
-    halfmin_counter = 0;
+    // Restore previous backlight and underglow brightness after timeout
+    restore_brightness();
 }
 
 //
@@ -135,31 +117,9 @@ void encoder_update_user(uint8_t index, bool clockwise) {
 //
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-    // Key pressed
-    if (record->event.pressed) {
-
-        // If LEDs have been turned off, restore previous brightness
-        if (led_on == false || old_backlight_level == -1) {
-
-            if (old_backlight_level == -1) {
-                // Get previous backlight brightness
-                old_backlight_level = get_backlight_level();
-                // Get underglow backlight brightness
-                old_underglow_level = rgblight_get_val();
-            }
-
-            // Restore backlight brightness
-            backlight_set(old_backlight_level);
-            // Restore underglow brightness
-            rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), old_underglow_level);
-
-            led_on = true;
-        }
-
-        idle_timer = timer_read();
-        halfmin_counter = 0;
-    }
-
+    // Key pressed, restore previous backlight and underglow brightness after timeout
+    if (record -> event.pressed) restore_brightness();
+    
     return true;
 }
 
@@ -191,4 +151,30 @@ void matrix_scan_user(void) {
         led_on = false;
         halfmin_counter = 0;
     }
+}
+
+//
+// Restore previous backlight and underglow brightness
+//
+void restore_brightness() {
+    // If LEDs have been turned off, restore previous brightness
+        if (led_on == false || old_backlight_level == -1) {
+
+            if (old_backlight_level == -1) {
+                // Get previous backlight brightness
+                old_backlight_level = get_backlight_level();
+                // Get underglow backlight brightness
+                old_underglow_level = rgblight_get_val();
+            }
+
+            // Restore backlight brightness
+            backlight_set(old_backlight_level);
+            // Restore underglow brightness
+            rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), old_underglow_level);
+
+            led_on = true;
+        }
+
+        idle_timer = timer_read();
+        halfmin_counter = 0;
 }
