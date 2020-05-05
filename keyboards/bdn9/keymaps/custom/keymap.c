@@ -185,7 +185,7 @@ void matrix_scan_user(void) {
         // Turn off backlight
         backlight_set(0);
         // Decrease underglow brightness
-        if (old_underglow_level > 50) rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), 50);
+        if (old_underglow_level > 25) rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), 25);
 
         led_on = false;
         halfmin_counter = 0;
