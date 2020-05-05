@@ -1,19 +1,12 @@
-/* Copyright 2019 Danny Nguyen <danny@keeb.io>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 #include QMK_KEYBOARD_H
+
+// LED timeout setup
+static uint16_t idle_timer = 0;
+static uint8_t halfmin_counter = 0;
+static uint8_t old_backlight_level = -1;
+static uint16_t old_underglow_level = -1;
+static bool led_on = true;
+static uint8_t led_timeout = 10; // Minutes
 
 //
 // Keymaps
@@ -63,7 +56,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
     // Get current underglow brightness
     uint16_t underglow_brightness = rgblight_get_val();
-    // Het active layer
+    // Get active layer
     uint8_t layer = biton32(state);
 
     // Set underglow to indicate active layer
@@ -113,5 +106,68 @@ void encoder_update_user(uint8_t index, bool clockwise) {
             else tap_code(KC_MS_WH_LEFT);
         }
 
+    }
+}
+
+//
+// Key processing
+//
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+    // Key pressed
+    if (record->event.pressed) {
+
+        // If LEDs have been turned off, restore previous brightness
+        if (led_on == false || old_backlight_level == -1) {
+
+            if (old_backlight_level == -1) {
+                // Get previous backlight brightness
+                old_backlight_level = get_backlight_level();
+                // Get underglow backlight brightness
+                old_underglow_level = rgblight_get_val();
+            }
+
+            // Restore backlight brightness
+            backlight_set(old_backlight_level);
+            // Restore underglow brightness
+            rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), old_underglow_level);
+
+            led_on = true;
+        }
+
+        idle_timer = timer_read();
+        halfmin_counter = 0;
+    }
+
+    return true;
+}
+
+//
+// Scan matrix
+//
+void matrix_scan_user(void) {
+
+    if (idle_timer == 0) idle_timer = timer_read();
+
+    if ( led_on && timer_elapsed(idle_timer) > 30000) {
+        halfmin_counter++;
+        idle_timer = timer_read();
+    }
+
+    // Timeout has passed
+    if ( led_on && halfmin_counter >= led_timeout * 2) {
+
+        // Get previous backlight brightness
+        old_backlight_level = get_backlight_level();
+        // Get underglow backlight brightness
+        old_underglow_level = rgblight_get_val();
+
+        // Turn off backlight
+        backlight_set(0);
+        // Decrease underglow brightness
+        if (old_underglow_level > 50) rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), 50);
+
+        led_on = false;
+        halfmin_counter = 0;
     }
 }
