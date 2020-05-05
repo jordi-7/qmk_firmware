@@ -108,8 +108,26 @@ void encoder_update_user(uint8_t index, bool clockwise) {
 
     }
 
-    // Restore previous backlight and underglow brightness after timeout
-    restore_brightness();
+    // If LEDs have been turned off, restore previous brightness
+    if (led_on == false || old_backlight_level == -1) {
+
+        if (old_backlight_level == -1) {
+            // Get previous backlight brightness
+            old_backlight_level = get_backlight_level();
+            // Get underglow backlight brightness
+            old_underglow_level = rgblight_get_val();
+        }
+
+        // Restore backlight brightness
+        backlight_set(old_backlight_level);
+        // Restore underglow brightness
+        rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), old_underglow_level);
+
+        led_on = true;
+    }
+
+    idle_timer = timer_read();
+    halfmin_counter = 0;
 }
 
 //
@@ -117,47 +135,9 @@ void encoder_update_user(uint8_t index, bool clockwise) {
 //
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-    // Key pressed, restore previous backlight and underglow brightness after timeout
-    if (record -> event.pressed) restore_brightness();
-    
-    return true;
-}
-
-//
-// Scan matrix
-//
-void matrix_scan_user(void) {
-
-    if (idle_timer == 0) idle_timer = timer_read();
-
-    if ( led_on && timer_elapsed(idle_timer) > 30000) {
-        halfmin_counter++;
-        idle_timer = timer_read();
-    }
-
-    // Timeout has passed
-    if ( led_on && halfmin_counter >= led_timeout * 2) {
-
-        // Get previous backlight brightness
-        old_backlight_level = get_backlight_level();
-        // Get underglow backlight brightness
-        old_underglow_level = rgblight_get_val();
-
-        // Turn off backlight
-        backlight_set(0);
-        // Decrease underglow brightness
-        if (old_underglow_level > 50) rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), 50);
-
-        led_on = false;
-        halfmin_counter = 0;
-    }
-}
-
-//
-// Restore previous backlight and underglow brightness
-//
-void restore_brightness() {
-    // If LEDs have been turned off, restore previous brightness
+    // Key pressed, restore previous backlight and underglow brightness if timeout has passed
+    if (record -> event.pressed) {
+        // If LEDs have been turned off, restore previous brightness
         if (led_on == false || old_backlight_level == -1) {
 
             if (old_backlight_level == -1) {
@@ -177,4 +157,37 @@ void restore_brightness() {
 
         idle_timer = timer_read();
         halfmin_counter = 0;
+    }
+    
+    return true;
+}
+
+//
+// Scan matrix
+//
+void matrix_scan_user(void) {
+
+    if (idle_timer == 0) idle_timer = timer_read();
+
+    if (led_on && timer_elapsed(idle_timer) > 30000) {
+        halfmin_counter++;
+        idle_timer = timer_read();
+    }
+
+    // Timeout has passed
+    if (led_on && halfmin_counter >= led_timeout * 2) {
+
+        // Get previous backlight brightness
+        old_backlight_level = get_backlight_level();
+        // Get underglow backlight brightness
+        old_underglow_level = rgblight_get_val();
+
+        // Turn off backlight
+        backlight_set(0);
+        // Decrease underglow brightness
+        if (old_underglow_level > 50) rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), 50);
+
+        led_on = false;
+        halfmin_counter = 0;
+    }
 }
