@@ -56,6 +56,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
     // Get current underglow brightness
     uint16_t underglow_brightness = rgblight_get_val();
+
     // Get active layer
     uint8_t layer = biton32(state);
 
@@ -184,8 +185,13 @@ void matrix_scan_user(void) {
 
         // Turn off backlight
         backlight_set(0);
-        // Decrease underglow brightness
-        if (old_underglow_level > 25) rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), 25);
+        // Turn off underglow
+        rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), 0);
+
+        // Activate default layer
+        layer_off(1);
+        layer_off(2);
+        layer_on(0);
 
         led_on = false;
         halfmin_counter = 0;
