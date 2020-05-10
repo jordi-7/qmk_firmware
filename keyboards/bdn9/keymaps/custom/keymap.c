@@ -14,21 +14,21 @@ static uint8_t led_timeout = 10; // Minutes
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Layer 0
-    [0] = LAYOUT(
+    [0] = LAYOUT (
         KC_MUTE, KC_HOME, KC_MPLY,
         MO(1)  , KC_UP  , RGB_MOD,
         KC_LEFT, KC_DOWN, KC_RGHT
     ),
 
     // Layer 1
-    [1] = LAYOUT(
+    [1] = LAYOUT (
         RESET  , BL_STEP, KC_STOP,
         _______, KC_HOME, RGB_MOD,
         KC_MPRV, KC_END , KC_MNXT
     ),
 
     // Layer 2
-    [2] = LAYOUT(
+    [2] = LAYOUT (
         RESET  , BL_STEP, KC_STOP,
         _______, KC_HOME, RGB_MOD,
         KC_MPRV, KC_END , KC_MNXT
