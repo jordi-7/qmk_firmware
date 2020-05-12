@@ -65,12 +65,12 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
     // Layer 0
     case 0:
-        rgblight_sethsv(213, 255, underglow_brightness);
+        rgblight_sethsv(0, 255, underglow_brightness);
         break;
 
     // Layer 1
     case 1:
-        rgblight_sethsv(128, 255, underglow_brightness);
+        rgblight_sethsv(0, 0, underglow_brightness);
         break;
 
     // Layer 2
