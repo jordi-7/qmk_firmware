@@ -43,7 +43,7 @@ void keyboard_post_init_user(void) {
     // Wait for keyboard startup
     wait_ms(100);
     // Restore previous underglow brightness
-    rgblight_sethsv(213, 255, rgblight_get_val());  
+    rgblight_sethsv(0, 255, rgblight_get_val());  
 }
 
 //
