@@ -14,3 +14,4 @@ OLED_DRIVER_ENABLE      = yes
 
 BOOTLOADER              = atmel-dfu
 SPLIT_TRANSPORT         = mirror
+WPM_ENABLE = yes
