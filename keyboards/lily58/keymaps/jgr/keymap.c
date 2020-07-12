@@ -197,7 +197,7 @@ static void render_anim(void) {
         }
         anim_sleep = timer_read32();
     } else {
-        if(timer_elapsed32(anim_sleep) > OLED_TIMEOUT) {
+        if(timer_elapsed32(anim_sleep) > 600000) {
             oled_off();
         } else {
             if(timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {

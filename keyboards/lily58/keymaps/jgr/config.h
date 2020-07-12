@@ -58,7 +58,6 @@
 #define EE_HANDS
 #define USE_SERIAL_PD2
 
-#define OLED_DISABLE_TIMEOUT
 #define TAPPING_TERM_PER_KEY
 #if defined(RGBLIGHT_ENABLE)
 #    define RGBLIGHT_HUE_STEP 10
@@ -72,3 +71,5 @@
 
 // Swap encoder A & B pad definitions
 #define ENCODER_DIRECTION_FLIP
+
+#define OLED_TIMEOUT 600000
