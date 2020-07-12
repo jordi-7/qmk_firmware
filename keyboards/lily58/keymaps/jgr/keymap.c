@@ -1,58 +1,155 @@
-/* Copyright 2019 Thomas Baart <thomas@splitkb.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
 bool is_alt_tab_active = false;
 uint16_t alt_tab_timer = 0;
-
-enum custom_keycodes {
-  QWERTY = SAFE_RANGE,
-  LOWER,
-  RAISE,
-  ADJUST,
-};
-
-enum layers {
-    _QWERTY,
-    _2WERTY, //pronounced "twerty," obviously
-    _LOWER,
-    _RAISE,
-    _ADJUST,
-};
-
 char wpm_str[10];
-
-
+// LED timeout setup
+static uint16_t idle_timer = 0;
+static uint8_t halfmin_counter = 0;
+static uint16_t old_underglow_level = -1;
+static bool led_on = true;
+static uint8_t led_timeout = 10; // Minutes
+static long int oled_timeout = 600000; // 10 minutes
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+    [0] = LAYOUT( \
+    KC_ESC,   KC_1,   KC_2,    KC_3,      KC_4,       KC_5,                           KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_GRV, \
+    KC_TAB,   KC_Q,   KC_W,    KC_E,      KC_R,       KC_T,                           KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS, \
+    KC_SPC,   KC_A,   KC_S,    KC_D,      KC_F,       KC_G,                           KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENTER, \
+    KC_LSHIFT,   KC_Z,   KC_X,    KC_C,      KC_V,       KC_B, KC_LBRC,        KC_RBRC,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_RSHIFT, \
+                                KC_LCTRL,    KC_LGUI,     KC_RALT, KC_BSPACE,       KC_SPC,   KC_RALT,  KC_RCTRL, KC_RCTRL \
+    ),
 
-
- [_QWERTY] = LAYOUT( \
-  KC_ESC,   KC_1,   KC_2,    KC_3,      KC_4,       KC_5,                           KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_GRV, \
-  KC_TAB,   KC_Q,   KC_W,    KC_E,      KC_R,       KC_T,                           KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS, \
-  KC_SPC,   KC_A,   KC_S,    KC_D,      KC_F,       KC_G,                           KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENTER, \
-  KC_LSHIFT,   KC_Z,   KC_X,    KC_C,      KC_V,       KC_B, KC_LBRC,        KC_RBRC,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_RSHIFT, \
-                             KC_LCTRL,    KC_LGUI,     KC_RALT, KC_BSPACE,       KC_SPC,   KC_RALT,  KC_RCTRL, KC_RCTRL \
-)
+    [1] = LAYOUT( \
+    KC_ESC,   KC_1,   KC_2,    KC_3,      KC_4,       KC_5,                           KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_GRV, \
+    KC_TAB,   KC_Q,   KC_W,    KC_E,      KC_R,       KC_T,                           KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS, \
+    KC_SPC,   KC_A,   KC_S,    KC_D,      KC_F,       KC_G,                           KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENTER, \
+    KC_LSHIFT,   KC_Z,   KC_X,    KC_C,      KC_V,       KC_B, KC_LBRC,        KC_RBRC,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_RSHIFT, \
+                                KC_LCTRL,    KC_LGUI,     KC_RALT, KC_BSPACE,       KC_SPC,   KC_RALT,  KC_RCTRL, KC_RCTRL \
+    )
 };
 
+//
+// Keyboard initialization
+//
+void keyboard_post_init_user(void) {
+    // Wait for keyboard startup
+    wait_ms(100);
+    // Restore previous underglow brightness
+    rgblight_sethsv(15, 255, rgblight_get_val());  
+}
+
+//
+// Layer changed
+//
 layer_state_t layer_state_set_user(layer_state_t state) {
-    return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+    
+    // Color codes
+    // https://github.com/qmk/qmk_firmware/blob/master/quantum/rgblight_list.h
+
+    // Get current underglow brightness
+    uint16_t underglow_brightness = rgblight_get_val();
+
+    // Get active layer
+    uint8_t layer = biton32(state);
+
+    // Set underglow to indicate active layer
+    switch (layer) {
+        // Layer 0
+        case 0:
+            rgblight_sethsv(15, 255, underglow_brightness);
+            break;
+        // Layer 1
+        case 1:
+            rgblight_sethsv(0, 0, underglow_brightness);
+            break;
+    }
+    
+    return state;
+}
+
+//
+// Rotary encoder actuated
+//
+void encoder_update_user(uint8_t index, bool clockwise) {
+    // Right rotary encoder
+    if (index == 0) {
+        // Horizontal scroll
+        if (clockwise) tap_code(KC_MS_WH_RIGHT);
+        else tap_code(KC_MS_WH_LEFT);
+    }
+
+    // If LEDs have been turned off, restore previous brightness
+    if (led_on == false || old_underglow_level == -1) {
+
+        if (old_underglow_level == -1) {
+            // Get underglow backlight brightness
+            old_underglow_level = rgblight_get_val();
+        }
+
+        // Restore underglow brightness
+        rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), old_underglow_level);
+
+        led_on = true;
+    }
+
+    idle_timer = timer_read();
+    halfmin_counter = 0;
+}
+
+//
+// Key processing
+//
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+    // Key pressed, restore previous backlight and underglow brightness if timeout has passed
+    if (record -> event.pressed) {
+        // If LEDs have been turned off, restore previous brightness
+        if (led_on == false || old_underglow_level == -1) {
+
+            if (old_underglow_level == -1) {
+                // Get underglow backlight brightness
+                old_underglow_level = rgblight_get_val();
+            }
+
+            // Restore underglow brightness
+            rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), old_underglow_level);
+
+            led_on = true;
+        }
+
+        idle_timer = timer_read();
+        halfmin_counter = 0;
+    }
+    
+    return true;
+}
+
+//
+// Scan matrix
+//
+void matrix_scan_user(void) {
+
+    if (idle_timer == 0) idle_timer = timer_read();
+
+    if (led_on && timer_elapsed(idle_timer) > 30000) {
+        halfmin_counter++;
+        idle_timer = timer_read();
+    }
+
+    // Timeout has passed
+    if (led_on && halfmin_counter >= led_timeout * 2) {
+
+        // Get underglow backlight brightness
+        old_underglow_level = rgblight_get_val();
+
+        // Turn off underglow
+        rgblight_sethsv(rgblight_get_hue(), rgblight_get_sat(), 0);
+
+        led_on = false;
+        halfmin_counter = 0;
+    }
 }
 
 
@@ -65,18 +162,8 @@ static void render_status(void) {
     // Host Keyboard Layer Status
     oled_write_P(PSTR("Layer: "), false);
     switch (get_highest_layer(layer_state)) {
-        case _QWERTY:
+        case 0:
             oled_write_P(PSTR("QWERTY"), false);
-            break;
-        
-        case _LOWER:
-            oled_write_P(PSTR("Numpad"), false);
-            break;
-        case _RAISE:
-            oled_write_P(PSTR("F Keys"), false);
-            break;
-        case _ADJUST:
-            oled_write_P(PSTR("RGB   "), false);
             break;
         default:
             oled_write_P(PSTR("Undefined"), false);
@@ -184,7 +271,7 @@ static void render_anim(void) {
              // oled_write_raw_P(prep[abs((PREP_FRAMES-1)-current_prep_frame)], ANIM_SIZE); // uncomment if IDLE_FRAMES >1
              oled_write_raw_P(prep[0], ANIM_SIZE);  // remove if IDLE_FRAMES >1
          }
-         if(get_current_wpm() >=TAP_SPEED){
+         if(get_current_wpm() >=TAP_SPEED) {
              current_tap_frame = (current_tap_frame + 1) % TAP_FRAMES;
              oled_write_raw_P(tap[abs((TAP_FRAMES-1)-current_tap_frame)], ANIM_SIZE);
          }
@@ -197,7 +284,7 @@ static void render_anim(void) {
         }
         anim_sleep = timer_read32();
     } else {
-        if(timer_elapsed32(anim_sleep) > 600000) {
+        if(timer_elapsed32(anim_sleep) > oled_timeout) {
             oled_off();
         } else {
             if(timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
@@ -228,17 +315,5 @@ void oled_task_user(void) {
         oled_set_cursor(0,6);
         sprintf(wpm_str, "%03d", get_current_wpm());
         oled_write(wpm_str, false);
-    }
-}
-
-//
-// Rotary encoder actuated
-//
-void encoder_update_user(uint8_t index, bool clockwise) {
-    // Left rotary encoder
-    if (index == 0) {
-        // Horizontal scroll
-        if (clockwise) tap_code(KC_MS_WH_RIGHT);
-        else tap_code(KC_MS_WH_LEFT);
     }
 }
