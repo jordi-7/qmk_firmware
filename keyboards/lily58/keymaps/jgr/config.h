@@ -33,6 +33,8 @@
 /* disable action features */
 #define NO_ACTION_ONESHOT
 #define NO_ACTION_MACRO
+#define NO_ACTION_FUNCTION
+#define NO_ACTION_TAPPING
 
 #define ENCODERS_PAD_A { F4 }
 #define ENCODERS_PAD_B { F5 }
@@ -50,8 +52,5 @@
 
 // Enable lighting layers
 #define RGBLIGHT_LAYERS
-
-// Swap encoder A & B pad definitions
-#define ENCODER_DIRECTION_FLIP
 
 #define OLED_TIMEOUT 600000 // 10 minutes
