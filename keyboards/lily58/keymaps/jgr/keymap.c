@@ -160,10 +160,10 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 
 static void render_status(void) {
     // Host Keyboard Layer Status
-    oled_write_P(PSTR("Layer: "), false);
+    oled_write_P(PSTR("Layer "), false);
     switch (get_highest_layer(layer_state)) {
         case 0:
-            oled_write_P(PSTR("QWERTY"), false);
+            oled_write_P(PSTR("1"), false);
             break;
         default:
             oled_write_P(PSTR("Undefined"), false);
