@@ -24,7 +24,7 @@
 #define RGBLIGHT_SPLIT
 #define RGB_DI_PIN D3
 #define RGBLED_NUM 28 // Total number of LEDs
-#define RGBLED_SPLIT { 14, 14 }
+#define RGBLED_SPLIT { 20, 20 }
 
 /*
  * Feature disable options
