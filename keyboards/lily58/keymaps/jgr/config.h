@@ -23,7 +23,7 @@
 /* WS2812 RGB LED */
 #define RGBLIGHT_SPLIT
 #define RGB_DI_PIN D3
-#define RGBLED_NUM 28 // Total number of LEDs
+#define RGBLED_NUM 40 // Total number of LEDs
 #define RGBLED_SPLIT { 20, 20 }
 
 /*
@@ -43,12 +43,12 @@
 #define USE_SERIAL_PD2
 
 #define TAPPING_TERM_PER_KEY
-#if defined(RGBLIGHT_ENABLE)
-#    define RGBLIGHT_HUE_STEP 10
-#    define RGBLIGHT_SAT_STEP 10
-#    define RGBLIGHT_VAL_STEP 10
-#    define RGBLIGHT_LIMIT_VAL 255
-#endif
+
+#define RGBLIGHT_HUE_STEP 10
+#define RGBLIGHT_SAT_STEP 10
+#define RGBLIGHT_VAL_STEP 10
+#define RGBLIGHT_LIMIT_VAL 255
+
 
 // Enable lighting layers
 #define RGBLIGHT_LAYERS
