@@ -10,27 +10,22 @@ static bool led_on = true;
 static uint8_t led_timeout = 10; // Minutes
 static long int oled_timeout = 600000; // 10 minutes
 
-enum layer_number {
-  _PRIMARY = 0,
-  _SECONDARY,
-};
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-    [_PRIMARY] = LAYOUT(
-    KC_GESC,            KC_1,       KC_2,       KC_3,                   KC_4,       KC_5,                                       KC_6,       KC_7,           KC_8,           KC_9,       KC_0,       KC_MINS, \
-    KC_TAB,             KC_Q,       KC_W,       KC_E,                   KC_R,       KC_T,                                       KC_Y,       KC_U,           KC_I,           KC_O,       KC_P,       KC_EQL, \
-    KC_DEL,             KC_A,       KC_S,       KC_D,                   KC_F,       KC_G,                                       KC_H,       KC_J,           KC_K,           KC_L,       KC_SCLN,    KC_ENTER, \
-    LSFT_T(KC_LBRC),    KC_Z,       KC_X,       KC_C,                   KC_V,       KC_B,       KC_CAPS,            KC_QUOT,    KC_N,       KC_M,           KC_COMM,        KC_DOT,     KC_SLSH,    RSFT_T(KC_RBRC), \
-                                                LCTL_T(LSFT(KC_LCBR)),  KC_LGUI,    KC_LAPO,    KC_BSPACE,          KC_SPC,     KC_RAPC,    TT(_SECONDARY), RCTL_T(LSFT(KC_RCBR))
+    [0] = LAYOUT(
+    KC_GESC,            KC_1,       KC_2,       KC_3,                   KC_4,       KC_5,                                       KC_6,       KC_7,       KC_8,           KC_9,       KC_0,       KC_MINS, \
+    KC_TAB,             KC_Q,       KC_W,       KC_E,                   KC_R,       KC_T,                                       KC_Y,       KC_U,       KC_I,           KC_O,       KC_P,       KC_EQL, \
+    KC_DEL,             KC_A,       KC_S,       KC_D,                   KC_F,       KC_G,                                       KC_H,       KC_J,       KC_K,           KC_L,       KC_SCLN,    KC_ENTER, \
+    LSFT_T(KC_LBRC),    KC_Z,       KC_X,       KC_C,                   KC_V,       KC_B,       KC_CAPS,            KC_QUOT,    KC_N,       KC_M,       KC_COMM,        KC_DOT,     KC_SLSH,    RSFT_T(KC_RBRC), \
+                                                LCTL_T(LSFT(KC_LBRC)),  KC_LGUI,    KC_LAPO,    KC_BSPACE,          KC_SPC,     KC_RAPC,    TT(1),      RCTL_T(RSFT(KC_RBRC))
     ),
 
-    [_SECONDARY] = LAYOUT(
-    KC_F1,              KC_F2,      KC_F3,      KC_F4,                  KC_F5,      KC_F6,                                      KC_F7,      KC_F8,          KC_F9,          KC_F10,     KC_F11,     KC_F12, \
-    KC_GRV,             KC_VOLD,    KC_UP,      KC_VOLU,                KC_MUTE,    KC_TRNS,                                    KC_HOME,    KC_PGUP,        KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_WWW_REFRESH, \
-    KC_TRNS,            KC_LEFT,    KC_DOWN,    KC_RGHT,                KC_TRNS,    KC_TRNS,                                    KC_END,     KC_PGDN,        KC_TRNS,        KC_UP,      KC_TRNS,    KC_TRNS, \
-    KC_TRNS,            KC_MRWD,    KC_MFFD,    RGB_TOG,                RGB_VAD,    RGB_VAI,    KC_PWR,             KC_BSLS,    GUI_OFF,    GUI_ON,         KC_LEFT,        KC_DOWN,    KC_RGHT,    KC_PSCR, \
-                                                KC_TRNS,                KC_TRNS,    KC_TRNS,    KC_DEL,             KC_MPLY,    KC_TRNS,    KC_TRNS,        KC_TRNS
+    [1] = LAYOUT(
+    KC_F1,              KC_F2,      KC_F3,      KC_F4,                  KC_F5,      KC_F6,                                      KC_F7,      KC_F8,      KC_F9,          KC_F10,     KC_F11,     KC_F12, \
+    KC_GRV,             KC_VOLD,    KC_UP,      KC_VOLU,                KC_MUTE,    KC_TRNS,                                    KC_HOME,    KC_PGUP,    KC_TRNS,        KC_TRNS,    KC_TRNS,    KC_WWW_REFRESH, \
+    KC_TRNS,            KC_LEFT,    KC_DOWN,    KC_RGHT,                KC_TRNS,    KC_TRNS,                                    KC_END,     KC_PGDN,    KC_TRNS,        KC_UP,      KC_TRNS,    KC_TRNS, \
+    KC_TRNS,            KC_MRWD,    KC_MFFD,    RGB_TOG,                RGB_VAD,    RGB_VAI,    KC_PWR,             KC_BSLS,    GUI_OFF,    GUI_ON,     KC_LEFT,        KC_DOWN,    KC_RGHT,    KC_PSCR, \
+                                                KC_TRNS,                KC_TRNS,    KC_TRNS,    KC_DEL,             KC_MPLY,    KC_TRNS,    KC_TRNS,    KC_TRNS
     ),
 
 };
@@ -62,11 +57,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     // Set underglow to indicate active layer
     switch (layer) {
         // Layer 0
-        case _PRIMARY:
+        case 0:
             rgblight_sethsv(15, 255, underglow_brightness);
             break;
         // Layer 1
-        case _SECONDARY:
+        case 1:
             rgblight_sethsv(0, 0, underglow_brightness);
             break;
     }
@@ -167,7 +162,7 @@ static void render_status(void) {
     // Host Keyboard Layer Status
     oled_write_P(PSTR("Layer "), false);
     switch (get_highest_layer(layer_state)) {
-        case _SECONDARY:
+        case 1:
             oled_write_P(PSTR("1"), false);
             break;
         default:
