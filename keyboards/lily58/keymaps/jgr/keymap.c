@@ -1,7 +1,20 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
+// Animation configuration
+#define IDLE_FRAMES 5
+#define IDLE_SPEED 30 // below this wpm value your animation will idle
+#define TAP_FRAMES 2
+#define TAP_SPEED 40 // above this wpm value typing animation to triggere
+#define ANIM_FRAME_DURATION 200 // how long each frame lasts in ms
+#define ANIM_SIZE 636 // number of bytes in array, minimize for adequate firmware size, max is 1024
+
 char wpm_str[10];
+uint32_t anim_timer = 0;
+uint32_t anim_sleep = 0;
+uint8_t current_idle_frame = 0;
+uint8_t current_tap_frame = 0;
+
 // LED timeout setup
 static uint16_t idle_timer = 0;
 static uint8_t halfmin_counter = 0;
@@ -59,7 +72,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     // Get active layer
     uint8_t layer = biton32(state);
 
-    // Set underglow to indicate active layer
+    // Layer indicator on RGB underglow
     switch (layer) {
         // Layer 0
         case 0:
@@ -162,56 +175,50 @@ void matrix_scan_user(void) {
     }
 }
 
-
+//
+// Rotate OLED display
+//
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 	if (!is_keyboard_master()) return OLED_ROTATION_180;
     else return rotation;
 }
 
+//
+// Render left OLED display
+//
 static void render_status(void) {
-    // Host Keyboard Layer Status
-    oled_write_P(PSTR("Layer "), false);
+    
+    // WPM
+    oled_write_P(PSTR("      "), false);
+    sprintf(wpm_str, "%03d", get_current_wpm());
+    oled_write(wpm_str, false);
+    oled_write_P(PSTR("   WPM"), false);
+    
+    // Capslock indicator
+    led_t led_state = host_keyboard_led_state();
+    oled_write_P(led_state.caps_lock ? PSTR("\n\n      CAPS LOCK") : PSTR("\n\n       "), false);
+
+    // Layer indicator
+    oled_write_P(PSTR("\n      LAYER "), false);
+
     switch (get_highest_layer(layer_state)) {
         case 1:
-            oled_write_P(PSTR("1"), false);
+            oled_write_P(PSTR("  1"), false);
             break;
         default:
-            oled_write_P(PSTR("0"), false);
+            oled_write_P(PSTR("  0"), false);
     }
 
-    //Host Keyboard LED Status
-    led_t led_state = host_keyboard_led_state();
-    oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("       "), false);
-    oled_write_P(led_state.caps_lock ? PSTR("CAPS ") : PSTR("       "), false);
-    oled_write_P(led_state.scroll_lock ? PSTR("SCRL") : PSTR("       "), false);
-
+    // Capslock indicator on RGB underglow
     uint16_t underglow_brightness = rgblight_get_val();
 
     if (led_state.caps_lock) rgblight_sethsv(0, 0, underglow_brightness);
     else if (layer_state == 0) rgblight_sethsv(15, 255, underglow_brightness);
 }
 
-
-// WPM-responsive animation stuff here
-#define IDLE_FRAMES 5
-#define IDLE_SPEED 30 // below this wpm value your animation will idle
-
-// #define PREP_FRAMES 1 // uncomment if >1
-
-#define TAP_FRAMES 2
-#define TAP_SPEED 40 // above this wpm value typing animation to triggere
-
-#define ANIM_FRAME_DURATION 200 // how long each frame lasts in ms
-// #define SLEEP_TIMER 60000 // should sleep after this period of 0 wpm, needs fixing
-#define ANIM_SIZE 636 // number of bytes in array, minimize for adequate firmware size, max is 1024
-
-uint32_t anim_timer = 0;
-uint32_t anim_sleep = 0;
-uint8_t current_idle_frame = 0;
-// uint8_t current_prep_frame = 0; // uncomment if PREP_FRAMES >1
-uint8_t current_tap_frame = 0;
-
-// Images credit j-inc(/James Incandenza) and pixelbenny. Credit to obosob for initial animation approach.
+//
+// OLED display animation
+//
 static void render_anim(void) {
     static const char PROGMEM idle[IDLE_FRAMES][ANIM_SIZE] = {
         {
@@ -276,33 +283,32 @@ static void render_anim(void) {
         },
     };
 
-    //assumes 1 frame prep stage
     void animation_phase(void) {
-        if(get_current_wpm() <=IDLE_SPEED){
+        if (get_current_wpm() <=IDLE_SPEED) {
             current_idle_frame = (current_idle_frame + 1) % IDLE_FRAMES;
             oled_write_raw_P(idle[abs((IDLE_FRAMES-1)-current_idle_frame)], ANIM_SIZE);
          }
-         if(get_current_wpm() >IDLE_SPEED && get_current_wpm() <TAP_SPEED){
-             // oled_write_raw_P(prep[abs((PREP_FRAMES-1)-current_prep_frame)], ANIM_SIZE); // uncomment if IDLE_FRAMES >1
-             oled_write_raw_P(prep[0], ANIM_SIZE);  // remove if IDLE_FRAMES >1
+         if (get_current_wpm() >IDLE_SPEED && get_current_wpm() <TAP_SPEED) {
+             oled_write_raw_P(prep[0], ANIM_SIZE);
          }
-         if(get_current_wpm() >=TAP_SPEED) {
+         if (get_current_wpm() >=TAP_SPEED) {
              current_tap_frame = (current_tap_frame + 1) % TAP_FRAMES;
              oled_write_raw_P(tap[abs((TAP_FRAMES-1)-current_tap_frame)], ANIM_SIZE);
          }
     }
-    if(get_current_wpm() != 000) {
-        oled_on(); // not essential but turns on animation OLED with any alpha keypress
-        if(timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
+
+    if (get_current_wpm() != 000) {
+        oled_on();
+        if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
             anim_timer = timer_read32();
             animation_phase();
         }
         anim_sleep = timer_read32();
     } else {
-        if(timer_elapsed32(anim_sleep) > oled_timeout) {
+        if (timer_elapsed32(anim_sleep) > oled_timeout) {
             oled_off();
         } else {
-            if(timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
+            if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
                 anim_timer = timer_read32();
                 animation_phase();
             }
@@ -310,25 +316,15 @@ static void render_anim(void) {
     }
 }
 
-// static void render_skull(void) { // Helen Tseong (http://shewolfe.co/), the original artist behind the skull, sadly only allowing use of the skull for my personal use. Her (excellent) works are copyright her, and I claim no ownership. Reach out to her for permission!
-//     static const char PROGMEM skull[] = {
-//     };
-//      oled_write_raw_P(skull, 801);
-//  }
-
+//
+// OLED display rendering
+//
 void oled_task_user(void) {
-    // Right side oled
     if (is_keyboard_master()) {
-        //render_skull();
-        //oled_set_cursor(7,6);
+        // Left side
         render_status();
-
-      // Left side oled  
-     // Renders the current keyboard state (layer, lock, caps, scroll, etc)
     } else {
+        // Right side
         render_anim();
-        oled_set_cursor(0,6);
-        sprintf(wpm_str, "%03d", get_current_wpm());
-        oled_write(wpm_str, false);
     }
 }
