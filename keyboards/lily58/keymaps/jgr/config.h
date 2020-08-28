@@ -1,13 +1,5 @@
 #pragma once
 
-/* USB Device descriptor parameter */
-#define VENDOR_ID       0xFC51
-#define PRODUCT_ID      0x0058 
-#define DEVICE_VER      0x0100
-#define MANUFACTURER    F_YUUCHI
-#define PRODUCT         Lily58
-#define DESCRIPTION     Lily58 is 6×4+5keys column-staggered split keyboard.
-
 /* Key matrix size */
 // Rows are doubled-up
 #define MATRIX_ROWS 10
@@ -22,7 +14,6 @@
 
 /* WS2812 RGB LED */
 #define RGBLIGHT_SPLIT
-#define RGB_DI_PIN D3
 #define RGBLED_NUM 40 // Total number of LEDs
 #define RGBLED_SPLIT { 20, 20 }
 
@@ -54,3 +45,5 @@
 #define RGBLIGHT_LAYERS
 
 #define OLED_TIMEOUT 600000 // 10 minutes
+
+#define TAPPING_TOGGLE 2

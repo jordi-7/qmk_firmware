@@ -130,3 +130,5 @@
 
 // Enable Caps Lock indicator using backlight (for keyboards without dedicated LED)
 #define BACKLIGHT_CAPS_LOCK
+
+#define TAPPING_TOGGLE 2
