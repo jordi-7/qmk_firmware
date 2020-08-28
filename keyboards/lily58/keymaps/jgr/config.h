@@ -25,8 +25,7 @@
 #define NO_ACTION_ONESHOT
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION
-#define NO_ACTION_TAPPING
-
+#define DISABLE_LEADER
 #define ENCODERS_PAD_A { F4 }
 #define ENCODERS_PAD_B { F5 }
 
@@ -47,3 +46,5 @@
 #define OLED_TIMEOUT 600000 // 10 minutes
 
 #define TAPPING_TOGGLE 2
+
+#define NO_MUSIC_MODE
