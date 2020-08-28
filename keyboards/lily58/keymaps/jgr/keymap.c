@@ -184,6 +184,11 @@ static void render_status(void) {
     oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("       "), false);
     oled_write_P(led_state.caps_lock ? PSTR("CAPS ") : PSTR("       "), false);
     oled_write_P(led_state.scroll_lock ? PSTR("SCRL") : PSTR("       "), false);
+
+    uint16_t underglow_brightness = rgblight_get_val();
+
+    if (led_state.caps_lock) rgblight_sethsv(0, 0, underglow_brightness);
+    else if (layer_state == 0) rgblight_sethsv(15, 255, underglow_brightness);
 }
 
 
