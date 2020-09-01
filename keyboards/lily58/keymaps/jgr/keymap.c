@@ -149,11 +149,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     // Get GUI keys status
     switch (keycode) {
-
+        // GUI keys disabled
         case GUI_OFF:
             if (record -> event.pressed) gui_on = false;
             break;
-
+        // GUI keys enabled
         case GUI_ON:
             if (record -> event.pressed) gui_on = true;
             break;
@@ -219,11 +219,11 @@ static void render_status(void) {
     oled_write_P(PSTR("\n      LAYER "), false);
 
     switch (get_highest_layer(layer_state)) {
-
+        // Layer 1
         case 1:
             oled_write_P(PSTR("  1"), false);
             break;
-
+        // Layer 0
         default:
             oled_write_P(PSTR("  0"), false);
             break;
