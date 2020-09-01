@@ -1,7 +1,7 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
-// OLED configuration
+// OLED setup
 #define IDLE_FRAMES 5
 #define IDLE_SPEED 30
 #define TAP_FRAMES 2
@@ -16,7 +16,7 @@ uint32_t anim_sleep = 0;
 uint8_t current_idle_frame = 0;
 uint8_t current_tap_frame = 0;
 
-// LED timeout setup
+// RGB underglow timeout setup
 static uint16_t idle_timer = 0;
 static uint8_t halfmin_counter = 0;
 static uint16_t old_underglow_level = -1;
