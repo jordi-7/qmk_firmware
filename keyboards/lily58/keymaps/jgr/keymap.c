@@ -1,7 +1,7 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
-// Animation configuration
+// OLED configuration
 #define IDLE_FRAMES 5
 #define IDLE_SPEED 30
 #define TAP_FRAMES 2
