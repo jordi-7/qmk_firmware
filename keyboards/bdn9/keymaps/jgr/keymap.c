@@ -43,7 +43,7 @@ void keyboard_post_init_user(void) {
     // Wait for keyboard startup
     wait_ms(100);
     // Restore previous underglow brightness
-    rgblight_sethsv(15, 255, rgblight_get_val());  
+    rgblight_sethsv(240, 255, rgblight_get_val());  
 }
 
 //
@@ -65,12 +65,12 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
     // Layer 0
     case 0:
-        rgblight_sethsv(15, 255, underglow_brightness);
+        rgblight_sethsv(240, 255, underglow_brightness);
         break;
 
     // Layer 1
     case 1:
-        rgblight_sethsv(0, 0, underglow_brightness);
+        rgblight_sethsv(120, 255, underglow_brightness);
         break;
 
     // Layer 2
