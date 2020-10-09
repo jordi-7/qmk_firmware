@@ -44,7 +44,7 @@ void ws2812_setleds(LED_TYPE *ledarray, uint16_t number_of_leds) {
 
     ws2812_sendarray_mask((uint8_t *)ledarray, number_of_leds * sizeof(LED_TYPE), masklo, maskhi);
 
-    _delay_us(280);
+    _delay_us(WS2812_TRST_US);
 }
 
 /*
