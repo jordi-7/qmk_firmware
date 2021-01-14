@@ -77,11 +77,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     switch (layer) {
         // Layer 0
         case 0:
-            rgblight_sethsv(128, 255, underglow_brightness);
+            rgblight_sethsv(213, 255, underglow_brightness);
             break;
         // Layer 1
         case 1:
-            rgblight_sethsv(213, 255, underglow_brightness);
+            rgblight_sethsv(128, 255, underglow_brightness);
             break;
     }
     
@@ -232,8 +232,8 @@ static void render_status(void) {
     // Caps lock indicator on RGB underglow
     uint16_t underglow_brightness = rgblight_get_val();
 
-    if (led_state.caps_lock) rgblight_sethsv(213, 255, underglow_brightness);
-    else if (layer_state == 0) rgblight_sethsv(128, 255, underglow_brightness);
+    if (led_state.caps_lock) rgblight_sethsv(128, 255, underglow_brightness);
+    else if (layer_state == 0) rgblight_sethsv(213, 255, underglow_brightness);
 }
 
 //
